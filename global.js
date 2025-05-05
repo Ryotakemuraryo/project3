@@ -99,9 +99,9 @@ svg1.append("text")
 
 const svg2 = d3.select("#bar-chart")
   .attr("width", 800)
-  .attr("height", 500);
+  .attr("height", 550);
 
-const margin2 = { top: 40, right: 20, bottom: 60, left: 50 },
+const margin2 = { top: 20, right: 150, bottom: 30, left: 70 },
       width2 = 800 - margin2.left - margin2.right,
       height2 = 500 - margin2.top - margin2.bottom;
 
