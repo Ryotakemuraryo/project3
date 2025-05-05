@@ -109,48 +109,35 @@ const g2 = svg2.append("g")
   .attr("transform", `translate(${margin2.left},${margin2.top})`);
 
 const data2 = await d3.csv("Mouse_Data_Long2.csv", d => ({
-    time: +d.time,
-    mouse: d.mouse,
-    temp: +d.temp
-  }));
+  time: +d.time,
+  temp: +d.temp  // f1 のみ
+}));
 
-const x0 = d3.scaleBand()
-  .domain(d3.group(data2, d => d.time).keys())  // ← .keys() を忘れずに！
+// x軸（時間）
+const xbar = d3.scaleBand()
+  .domain(data2.map(d => d.time))
   .range([0, width2])
-  .paddingInner(0.1);
+  .padding(0.2);
 
-const mouseNames = Array.from(d3.group(data2, d => d.mouse).keys());
-
-const x1 = d3.scaleBand()
-  .domain(mouseNames)
-  .range([0, x0.bandwidth()])
-  .padding(0.05);
-
-const y2 = d3.scaleLinear()
+// y軸（体温）
+const ybar = d3.scaleLinear()
   .domain([35, d3.max(data2, d => d.temp)])
   .nice()
   .range([height2, 0]);
 
-const color2 = d3.scaleOrdinal(d3.schemeTableau10);
-
 // 軸
 g2.append("g")
   .attr("transform", `translate(0,${height2})`)
-  .call(d3.axisBottom(x0).tickFormat(d => d + " min"));
-g2.append("g").call(d3.axisLeft(y2));
+  .call(d3.axisBottom(xbar).tickFormat(d => d + " min"));
+g2.append("g").call(d3.axisLeft(ybar));
 
-// 棒グラフ本体
-const barGroups = g2.selectAll("g.bar-group")
-  .data(d3.groups(data2, d => d.time))
-  .join("g")
-  .attr("class", "bar-group")
-  .attr("transform", d => `translate(${x0(d[0])},0)`);
-
-barGroups.selectAll("rect")
-  .data(d => d[1]) // 各 time に属する mouse-temp データ
+// 棒
+g2.selectAll("rect")
+  .data(data2)
   .join("rect")
-  .attr("x", d => x1(d.mouse))
-  .attr("y", d => y2(d.temp))
-  .attr("width", x1.bandwidth())
-  .attr("height", d => height2 - y2(d.temp))
-  .attr("fill", d => color2(d.mouse));
+  .attr("x", d => xbar(d.time))
+  .attr("y", d => ybar(d.temp))
+  .attr("width", xbar.bandwidth())
+  .attr("height", d => height2 - ybar(d.temp))
+  .attr("fill", "steelblue");
+
