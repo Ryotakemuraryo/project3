@@ -127,8 +127,14 @@ const ybar = d3.scaleLinear()
 
 // 軸
 g2.append("g")
+  .attr("class", "x-axis") 
   .attr("transform", `translate(0,${height2})`)
   .call(d3.axisBottom(xbar).tickFormat(d => d + " min"));
+
+g2.selectAll("g.x-axis text")
+  .attr("transform", "rotate(-45)")
+  .style("text-anchor", "end");
+
 g2.append("g").call(d3.axisLeft(ybar));
 
 // 棒
