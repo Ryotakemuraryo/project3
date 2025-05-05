@@ -57,3 +57,24 @@ for (const mouse of groups.keys()) {
     .style("color", color(mouse))
     .text(mouse);
 }
+
+// 繰り返し暗くする時間幅（ここでは720）
+const blockWidth = 720;
+const maxTime = d3.max(data, d => d.time);
+
+// スケールxがすでにある想定（時間→px）
+for (let start = 0; start < maxTime; start += blockWidth) {
+  const end = start + blockWidth;
+  
+  // 奇数ブロック番号（0, 2, 4, ...）だけ暗くする
+  const blockIndex = Math.floor(start / blockWidth);
+  if (blockIndex % 2 === 0) {
+    g.append("rect")
+      .attr("x", x(start))
+      .attr("y", 0)
+      .attr("width", x(end) - x(start))
+      .attr("height", height)
+      .attr("fill", "rgba(0, 0, 0, 0.15)");
+  }
+}
+
