@@ -125,7 +125,12 @@ const ybar = d3.scaleLinear()
   .nice()
   .range([height2, 0]);
 
-const avgTemp = d3.mean(data2, d => d.temp);
+
+const daytimeData = data2.filter((_, i) => i % 2 === 1); // 黄色 = 奇数index
+const nightData = data2.filter((_, i) => i % 2 === 0);   // 黒 = 偶数index
+const avgDay = d3.mean(daytimeData, d => d.temp);
+const avgNight = d3.mean(nightData, d => d.temp);
+
 
 
 // 軸
@@ -140,12 +145,7 @@ g2.selectAll("g.x-axis text")
 
 g2.append("g").call(d3.axisLeft(ybar));
 
-g2.insert("rect", ":first-child")  // ← 背面に入れるため insert を使う
-  .attr("x", 0)
-  .attr("y", ybar(avgTemp))  // 平均の位置から下へ
-  .attr("width", width2)
-  .attr("height", height2 - ybar(avgTemp))
-  .attr("fill", "rgba(255, 255, 0, 0.1)");
+
 // 棒
 g2.selectAll("rect")
   .data(data2)
@@ -155,6 +155,25 @@ g2.selectAll("rect")
   .attr("width", xbar.bandwidth())
   .attr("height", d => height2 - ybar(d.temp))
   .attr("fill", (_, i) => i % 2 === 0 ? "black" : "yellow"); 
+
+g2.append("line")
+  .attr("x1", 0)
+  .attr("x2", width2)
+  .attr("y1", ybar(avgDay))
+  .attr("y2", ybar(avgDay))
+  .attr("stroke", "gold")
+  .attr("stroke-width", 2)
+  .attr("stroke-dasharray", "3 3");
+
+// 夜平均（黒）
+g2.append("line")
+  .attr("x1", 0)
+  .attr("x2", width2)
+  .attr("y1", ybar(avgNight))
+  .attr("y2", ybar(avgNight))
+  .attr("stroke", "black")
+  .attr("stroke-width", 2)
+  .attr("stroke-dasharray", "3 3");
 
 
 const legendContainer = d3.select("body")  // または適切な要素に変更
