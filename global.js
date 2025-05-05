@@ -17,12 +17,7 @@ const data = await d3.csv("Mouse_Data_Long.csv", d => ({
   temp: +d.temp
 }));
 
-const fullmice = d3.group(data, d => d.mouse);
-const allMice = Array.from(fullmice.keys());
-const selectedMice = allMice.slice(0, Math.floor(allMice.length / 2));
-const groups = new Map(
-    selectedMice.map(mouse => [mouse, fullGroups.get(mouse)])
-  );
+const groups = d3.group(data, d => d.mouse);
 
 const x = d3.scaleLinear()
   .domain(d3.extent(data, d => d.time))
