@@ -95,3 +95,56 @@ svg1.append("text")
   .style("font-size", "14px")
   .text("Time (minutes)");
 
+
+
+const svg2 = d3.select("#bar-chart")
+  .attr("width", 800)
+  .attr("height", 500);
+
+const margin2 = { top: 40, right: 20, bottom: 60, left: 50 },
+      width2 = 800 - margin2.left - margin2.right,
+      height2 = 500 - margin2.top - margin2.bottom;
+
+const g2 = svg2.append("g")
+  .attr("transform", `translate(${margin2.left},${margin2.top})`);
+
+const x0 = d3.scaleBand()
+  .domain(d3.group(data, d => d.time).keys())  // ← .keys() を忘れずに！
+  .range([0, width2])
+  .paddingInner(0.1);
+
+const mouseNames = Array.from(d3.group(data, d => d.mouse).keys());
+
+const x1 = d3.scaleBand()
+  .domain(mouseNames)
+  .range([0, x0.bandwidth()])
+  .padding(0.05);
+
+const y2 = d3.scaleLinear()
+  .domain([35, d3.max(data, d => d.temp)])
+  .nice()
+  .range([height2, 0]);
+
+const color2 = d3.scaleOrdinal(d3.schemeTableau10);
+
+// 軸
+g2.append("g")
+  .attr("transform", `translate(0,${height2})`)
+  .call(d3.axisBottom(x0).tickFormat(d => d + " min"));
+g2.append("g").call(d3.axisLeft(y2));
+
+// 棒グラフ本体
+const barGroups = g2.selectAll("g.bar-group")
+  .data(d3.groups(data, d => d.time))
+  .join("g")
+  .attr("class", "bar-group")
+  .attr("transform", d => `translate(${x0(d[0])},0)`);
+
+barGroups.selectAll("rect")
+  .data(d => d[1]) // 各 time に属する mouse-temp データ
+  .join("rect")
+  .attr("x", d => x1(d.mouse))
+  .attr("y", d => y2(d.temp))
+  .attr("width", x1.bandwidth())
+  .attr("height", d => height2 - y2(d.temp))
+  .attr("fill", d => color2(d.mouse));
