@@ -1,14 +1,14 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-const svg = d3.select("svg")
+const svg1 = d3.select("#line-chart")
   .attr("width", 800)
   .attr("height", 500);
 
 const margin = { top: 20, right: 150, bottom: 30, left: 50 },
-      width = +svg.attr("width") - margin.left - margin.right,
-      height = +svg.attr("height") - margin.top - margin.bottom;
+      width = +svg1.attr("width") - margin.left - margin.right,
+      height = +svg1.attr("height") - margin.top - margin.bottom;
 
-const g = svg.append("g")
+const g = svg1.append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const data = await d3.csv("Mouse_Data_Long.csv", d => ({
@@ -30,13 +30,13 @@ const y = d3.scaleLinear()
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
-// 軸
+
 g.append("g")
   .attr("transform", `translate(0,${height})`)
   .call(d3.axisBottom(x));
 g.append("g").call(d3.axisLeft(y));
 
-// 線
+
 const line = d3.line()
   .x(d => x(d.time))
   .y(d => y(d.temp));
@@ -50,7 +50,6 @@ for (const [mouse, values] of groups) {
     .attr("d", line);
 }
 
-// 凡例をulに追加
 const legend = d3.select(".legend");
 for (const mouse of groups.keys()) {
   legend.append("li")
@@ -58,15 +57,13 @@ for (const mouse of groups.keys()) {
     .text(mouse);
 }
 
-// 繰り返し暗くする時間幅（ここでは720）
 const blockWidth = 720;
 const maxTime = d3.max(data, d => d.time);
 
-// スケールxがすでにある想定（時間→px）
+
 for (let start = 0; start < maxTime; start += blockWidth) {
   const end = start + blockWidth;
   
-  // 奇数ブロック番号（0, 2, 4, ...）だけ暗くする
   const blockIndex = Math.floor(start / blockWidth);
   if (blockIndex % 2 === 0) {
     g.append("rect")
