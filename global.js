@@ -84,7 +84,7 @@ svg1.append("text")
   .text("Body temperature difference in a week");
 
 svg1.append("text")
-  .attr("x", margin.left / 2)
+  .attr("x", margin.left / 4)
   .attr("y", height / 2 + margin.top)
   .attr("transform", `rotate(-90, ${margin.left / 2}, ${height / 2 + margin.top})`)
   .attr("text-anchor", "middle")
@@ -94,7 +94,7 @@ svg1.append("text")
 // X軸ラベル
 svg1.append("text")
   .attr("x", width / 2 + margin.left)
-  .attr("y", height + margin.top + margin.bottom - 5)
+  .attr("y", height + margin.top + margin.bottom + 10)
   .attr("text-anchor", "middle")
   .style("font-size", "14px")
   .text("Time (minutes)");
