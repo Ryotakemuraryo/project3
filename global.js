@@ -157,3 +157,30 @@ g2.selectAll("rect")
   .attr("fill", (_, i) => i % 2 === 0 ? "black" : "yellow"); 
 
 
+const legendContainer = d3.select("body")  // または適切な要素に変更
+  .append("div")
+  .attr("class", "bar-legend")
+  .style("margin", "10px 0");
+
+const legendData = [
+  { label: "Daytime", color: "yellow" },
+  { label: "Night", color: "black" }
+];
+
+const legendItems = legendContainer.selectAll("div")
+  .data(legendData)
+  .enter()
+  .append("div")
+  .style("display", "flex")
+  .style("align-items", "center")
+  .style("margin-bottom", "4px");
+
+legendItems.append("div")
+  .style("width", "15px")
+  .style("height", "15px")
+  .style("margin-right", "5px")
+  .style("background-color", d => d.color)
+  .style("border", "1px solid #000");
+
+legendItems.append("span")
+  .text(d => d.label);
