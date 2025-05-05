@@ -77,7 +77,7 @@ for (let start = 0; start < maxTime; start += blockWidth) {
 
 svg1.append("text")
   .attr("x", width / 2 + margin.left)
-  .attr("y", margin.top / 2)
+  .attr("y", 30)
   .attr("text-anchor", "middle")
   .style("font-size", "18px")
   .style("font-weight", "bold")
