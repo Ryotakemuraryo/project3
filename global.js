@@ -11,7 +11,7 @@ const margin = { top: 20, right: 150, bottom: 30, left: 50 },
 const g = svg.append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const data = await d3.csv("mouse_temp_long.csv", d => ({
+const data = await d3.csv("Mouse_Data_Long.csv", d => ({
   time: +d.time,
   mouse: d.mouse,
   temp: +d.temp
