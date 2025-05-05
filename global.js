@@ -108,12 +108,18 @@ const margin2 = { top: 40, right: 20, bottom: 60, left: 50 },
 const g2 = svg2.append("g")
   .attr("transform", `translate(${margin2.left},${margin2.top})`);
 
+const data2 = await d3.csv("Mouse_Data_Long2.csv", d => ({
+    time: +d.time,
+    mouse: d.mouse,
+    temp: +d.temp
+  }));
+
 const x0 = d3.scaleBand()
-  .domain(d3.group(data, d => d.time).keys())  // ← .keys() を忘れずに！
+  .domain(d3.group(data2, d => d.time).keys())  // ← .keys() を忘れずに！
   .range([0, width2])
   .paddingInner(0.1);
 
-const mouseNames = Array.from(d3.group(data, d => d.mouse).keys());
+const mouseNames = Array.from(d3.group(data2, d => d.mouse).keys());
 
 const x1 = d3.scaleBand()
   .domain(mouseNames)
@@ -121,7 +127,7 @@ const x1 = d3.scaleBand()
   .padding(0.05);
 
 const y2 = d3.scaleLinear()
-  .domain([35, d3.max(data, d => d.temp)])
+  .domain([35, d3.max(data2, d => d.temp)])
   .nice()
   .range([height2, 0]);
 
@@ -135,13 +141,13 @@ g2.append("g").call(d3.axisLeft(y2));
 
 // 棒グラフ本体
 const barGroups = g2.selectAll("g.bar-group")
-  .data(d3.groups(data, d => d.time))
+  .data2(d3.groups(data2, d => d.time))
   .join("g")
   .attr("class", "bar-group")
   .attr("transform", d => `translate(${x0(d[0])},0)`);
 
 barGroups.selectAll("rect")
-  .data(d => d[1]) // 各 time に属する mouse-temp データ
+  .data2(d => d[1]) // 各 time に属する mouse-temp データ
   .join("rect")
   .attr("x", d => x1(d.mouse))
   .attr("y", d => y2(d.temp))
