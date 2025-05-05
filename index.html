@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<svg width="800" height="500"></svg>
+<script type="module">
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+// SVG サイズ設定
+const svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height"),
+      margin = { top: 20, right: 150, bottom: 30, left: 50 },
+      innerWidth = width - margin.left - margin.right,
+      innerHeight = height - margin.top - margin.bottom;
+
+const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+// データ読み込み
+const data = await d3.csv("mouse_temp_long.csv", d => ({
+  time: +d.time,
+  mouse: d.mouse,
+  temp: +d.temp
+}));
+
+// マウスごとにグループ化
+const mouseGroups = d3.group(data, d => d.mouse);
+
+// スケール設定
+const x = d3.scaleLinear()
+  .domain(d3.extent(data, d => d.time))
+  .range([0, innerWidth]);
+
+const y = d3.scaleLinear()
+  .domain(d3.extent(data, d => d.temp))
+  .nice()
+  .range([innerHeight, 0]);
+
+const color = d3.scaleOrdinal(d3.schemeTableau10);
+
+// 軸描画
+g.append("g").attr("transform", `translate(0,${innerHeight})`).call(d3.axisBottom(x));
+g.append("g").call(d3.axisLeft(y));
+
+// 折れ線生成
+const line = d3.line()
+  .x(d => x(d.time))
+  .y(d => y(d.temp));
+
+// 各マウスごとに線を描画
+for (const [mouse, values] of mouseGroups) {
+  g.append("path")
+    .datum(values)
+    .attr("fill", "none")
+    .attr("stroke", color(mouse))
+    .attr("stroke-width", 1.5)
+    .attr("d", line);
+
+  svg.append("text")
+    .attr("x", width - margin.right + 10)
+    .attr("y", 20 + 20 * [...mouseGroups.keys()].indexOf(mouse))
+    .attr("fill", color(mouse))
+    .text(mouse);
+}
+</script>
+</body>
