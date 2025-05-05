@@ -2,7 +2,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const svg1 = d3.select("#line-chart")
   .attr("width", 800)
-  .attr("height", 500);
+  .attr("height", 700);
 
 const margin = { top: 20, right: 150, bottom: 30, left: 50 },
       width = +svg1.attr("width") - margin.left - margin.right,
@@ -77,7 +77,7 @@ for (let start = 0; start < maxTime; start += blockWidth) {
 
 svg1.append("text")
   .attr("x", width / 2 + margin.left)
-  .attr("y", 30)
+  .attr("y", margin.top / 2)
   .attr("text-anchor", "middle")
   .style("font-size", "18px")
   .style("font-weight", "bold")
