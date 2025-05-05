@@ -126,12 +126,6 @@ const ybar = d3.scaleLinear()
   .range([height2, 0]);
 
 const avgTemp = d3.mean(data2, d => d.temp);
-g2.append("text")
-  .attr("x", width2 - 100)
-  .attr("y", ybar(avgTemp) - 5)
-  .attr("fill", "red")
-  .style("font-size", "12px")
-  .text(`ave: ${avgTemp.toFixed(2)}°C`);
 
 
 // 軸
@@ -146,6 +140,12 @@ g2.selectAll("g.x-axis text")
 
 g2.append("g").call(d3.axisLeft(ybar));
 
+g2.insert("rect", ":first-child")  // ← 背面に入れるため insert を使う
+  .attr("x", 0)
+  .attr("y", ybar(avgTemp))  // 平均の位置から下へ
+  .attr("width", width2)
+  .attr("height", height2 - ybar(avgTemp))
+  .attr("fill", "rgba(255, 255, 0, 0.1)");
 // 棒
 g2.selectAll("rect")
   .data(data2)
