@@ -17,7 +17,12 @@ const data = await d3.csv("Mouse_Data_Long.csv", d => ({
   temp: +d.temp
 }));
 
-const groups = d3.group(data, d => d.mouse);
+const fullmice = d3.group(data, d => d.mouse);
+const allMice = Array.from(fullGroups.keys());
+const selectedMice = allMice.slice(0, Math.floor(allMice.length / 2));
+const groups = new Map(
+    selectedMice.map(mouse => [mouse, fullGroups.get(mouse)])
+  );
 
 const x = d3.scaleLinear()
   .domain(d3.extent(data, d => d.time))
@@ -28,13 +33,7 @@ const y = d3.scaleLinear()
   .nice()
   .range([height, 0]);
 
-  const myColors = [
-    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-    "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
-    "#393b79", "#637939", "#8c6d31", "#843c39", "#7b4173"
-  ];
-  
-  const color = d3.scaleOrdinal(myColors);
+const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 // 軸
 g.append("g")
