@@ -145,5 +145,6 @@ g2.selectAll("rect")
   .attr("y", d => ybar(d.temp))
   .attr("width", xbar.bandwidth())
   .attr("height", d => height2 - ybar(d.temp))
-  .attr("fill", "steelblue");
+  .attr("fill", (_, i) => i % 2 === 0 ? "black" : "yellow"); 
+
 
