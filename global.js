@@ -141,13 +141,13 @@ g2.append("g").call(d3.axisLeft(y2));
 
 // 棒グラフ本体
 const barGroups = g2.selectAll("g.bar-group")
-  .data2(d3.groups(data2, d => d.time))
+  .data(d3.groups(data2, d => d.time))
   .join("g")
   .attr("class", "bar-group")
   .attr("transform", d => `translate(${x0(d[0])},0)`);
 
 barGroups.selectAll("rect")
-  .data2(d => d[1]) // 各 time に属する mouse-temp データ
+  .data(d => d[1]) // 各 time に属する mouse-temp データ
   .join("rect")
   .attr("x", d => x1(d.mouse))
   .attr("y", d => y2(d.temp))
