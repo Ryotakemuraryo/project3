@@ -176,6 +176,23 @@ g2.append("line")
   .attr("stroke-dasharray", "3 3");
 
 
+svg2.append("text")
+  .attr("x", margin2.left / 2)
+  .attr("y", height2 / 2 + margin2.top)
+  .attr("transform", `rotate(-90, ${margin2.left / 2}, ${height2 / 2 + margin2.top})`)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text("Body Temperature (°C)");
+
+svg2.append("text")
+  .attr("x", width2 / 2 + margin2.left)
+  .attr("y", height2 + margin2.top + 50)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text("Time (minutes)");
+
+
+
 const legendContainer = d3.select("body")  // または適切な要素に変更
   .append("div")
   .attr("class", "bar-legend")
