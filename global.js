@@ -200,7 +200,9 @@ const legendContainer = d3.select("body")  // または適切な要素に変更
 
 const legendData = [
   { label: "Daytime", color: "yellow" },
-  { label: "Night", color: "black" }
+  { label: "Night", color: "black" },
+  { label: "Avg (Day)", color: "gold", type: "line" },
+  { label: "Avg (Night)", color: "black", type: "line" }
 ];
 
 const legendItems = legendContainer.selectAll("div")
@@ -211,12 +213,19 @@ const legendItems = legendContainer.selectAll("div")
   .style("align-items", "center")
   .style("margin-bottom", "4px");
 
-legendItems.append("div")
-  .style("width", "15px")
-  .style("height", "15px")
-  .style("margin-right", "5px")
-  .style("background-color", d => d.color)
-  .style("border", "1px solid #000");
+legendItems.append("svg")
+  .attr("width", 20)
+  .attr("height", 10)
+  .append("line")
+  .attr("x1", 0)
+  .attr("x2", 20)
+  .attr("y1", 5)
+  .attr("y2", 5)
+  .attr("stroke", d => d.color)
+  .attr("stroke-width", 3)
+  .attr("stroke-dasharray", d => d.type === "line" ? "4 2" : "0");
 
 legendItems.append("span")
+  .style("margin-left", "6px")
   .text(d => d.label);
+
