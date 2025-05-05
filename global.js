@@ -75,6 +75,7 @@ for (let start = 0; start < maxTime; start += blockWidth) {
   }
 }
 
+
 svg1.append("text")
   .attr("x", width / 2 + margin.left)
   .attr("y", 30)
@@ -92,9 +93,11 @@ svg1.append("text")
   .text("Body Temperature (°C)");
 
 // X軸ラベル
+
+svg1.attr("height", 600);  
 svg1.append("text")
   .attr("x", width / 2 + margin.left)
-  .attr("y", height + margin.top + margin.bottom + 10)
+  .attr("y", height + margin.top + margin.bottom + 20)
   .attr("text-anchor", "middle")
   .style("font-size", "14px")
   .text("Time (minutes)");
