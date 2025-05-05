@@ -125,6 +125,15 @@ const ybar = d3.scaleLinear()
   .nice()
   .range([height2, 0]);
 
+const avgTemp = d3.mean(data2, d => d.temp);
+g2.append("text")
+  .attr("x", width2 - 100)
+  .attr("y", ybar(avgTemp) - 5)
+  .attr("fill", "red")
+  .style("font-size", "12px")
+  .text(`ave: ${avgTemp.toFixed(2)}°C`);
+
+
 // 軸
 g2.append("g")
   .attr("class", "x-axis") 
